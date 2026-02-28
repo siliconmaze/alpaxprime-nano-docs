@@ -1,14 +1,14 @@
-# LPEX Prime Nano — Architecture Documentation
+# Alpax Prime Nano — Architecture Documentation
 
 ## Overview
 
-LPEX Prime Nano is an autonomous AI co-pilot built with Microsoft's AutoGen framework. It runs locally, connects to multiple LLM providers, and can execute tasks across Content, Build, and Ops domains.
+Alpax Prime Nano is an autonomous AI co-pilot built with Microsoft's AutoGen framework. It runs locally, connects to multiple LLM providers, and can execute tasks across Content, Build, and Ops domains.
 
 ## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         LPEX Prime Nano                             │
+│                         Alpax Prime Nano                             │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐         │

@@ -1,4 +1,4 @@
-# LPEX Prime Nano — Skills & Tools
+# Alpax Prime Nano — Skills & Tools
 
 ## How I Work
 

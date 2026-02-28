@@ -1,6 +1,6 @@
-# LPEX Prime Nano Docs
+# Alpax Prime Nano Docs
 
-Documentation for the LPEX Prime Nano autonomous AI co-pilot.
+Documentation for the Alpax Prime Nano autonomous AI co-pilot.
 
 ## Contents
 
