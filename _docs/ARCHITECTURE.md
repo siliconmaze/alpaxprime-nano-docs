@@ -72,6 +72,7 @@ Alpax Prime Nano is an autonomous AI co-pilot built with Microsoft's AutoGen fra
   - Communication (gmail, telegram)
   - Web (web_search)
   - AI delegation (spawn_subagent)
+  - Media (transcribe_audio, analyze_image)
 
 ### 4. Database (`engine/lib/db.ts`)
 - **Engine**: LibSQL (Turso/SQLite-compatible)
@@ -80,9 +81,23 @@ Alpax Prime Nano is an autonomous AI co-pilot built with Microsoft's AutoGen fra
   - `messages` — Individual messages
   - `cards` — Kanban tasks
   - `run_logs` — Execution logs
-  - `settings` — Configuration
+  - `settings` — Configuration key-value store (includes `card_type_rules` and `execution_rules` JSON blobs)
 
-### 5. Telegram Bot (`engine/lib/telegram-bot.ts`)
+### 5. Rules System (`engine/routes/rules.ts`)
+- **Card Type Rules** (`CardTypeRule`): Per-kind rules that control which tools are allowed/forbidden and what prompt text is prepended when a card of that kind runs. Fields: `id`, `kind`, `name`, `description`, `allowedTools[]`, `forbiddenTools[]`, `prompt`, `enabled`.
+- **Execution Rules** (`ExecutionRule`): Cross-thread behavioural rules injected into the agent system prompt. Fields: `id`, `name`, `trigger` (`on_process` | `on_complete_check` | `on_workflow`), `description`, `enforcement`, `enabled`.
+- **Seed data**: Five `CardTypeRule` records (code, content, monitor, todo, review) and four `ExecutionRule` records are inserted at migrate time.
+- **CRUD API**: `GET/POST/PUT/DELETE /rules`, `/rules/card-type/:kind`, `/rules/card-type`, `/rules/execution`.
+- **Injection**: Enabled `CardTypeRule` records are injected into the card execution prompt in `run-card.ts`. Enabled `ExecutionRule` records are injected into every thread's system prompt via `getSystemPrompt()` in `graph.ts`.
+
+### 6. Persistent Memory (`engine/agent/graph.ts`, `engine/lib/`)
+- **MEMORY.md injection**: `getSystemPrompt(threadId)` reads `MEMORY.md` from `media_base_dir` and prepends it to the system prompt for every new thread. Thread ID and data dir are also injected so the agent knows its own context.
+- **Compaction warning**: When `MEMORY.md` exceeds 180 lines, a warning is appended to the system prompt prompting the agent to compact its memory.
+- **Context hash**: `buildContextHash(dataDir)` computes a 12-char SHA-256 over enabled rule IDs + `updatedAt` timestamps + `MEMORY.md` mtime. Used to detect staleness.
+- **Auto-refresh**: `autoRefreshContextIfStale(threadId)` is called on every non-first turn (skipped for card- and sub- threads). When the hash has changed, `injectContextUpdate(threadId)` injects a `SystemMessage` into the existing thread checkpoint via `compiledGraph.updateState()`.
+- **HTTP endpoint**: `POST /threads/:id/refresh-context` exposes manual refresh.
+
+### 7. Telegram Bot (`engine/lib/telegram-bot.ts`)
 - **Library**: Grammy
 - **Features**:
   - Voice message transcription (Whisper)
@@ -153,4 +168,4 @@ The graph uses **LangGraph checkpointer** with LibSQL:
 
 ---
 
-*Last updated: 2025-02-28*
+*Last updated: 2026-02-28 (rev 4)*

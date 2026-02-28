@@ -10,7 +10,7 @@ I'm an autonomous AI co-pilot. When you send me a message:
 4. **Execute** — Run tools sequentially
 5. **Respond** — Return the result
 
-## Available Tools
+## Available Tools (9)
 
 ### 1. bash_exec
 **Purpose**: Run bash commands on the local machine
@@ -135,6 +135,18 @@ spawn_subagent(task="Research the latest AutoGen features and summarize")
 transcribe_audio(filePath="/path/to/voice.ogg", language="en")
 ```
 
+### 9. analyze_image
+**Purpose**: Analyze images using vision models
+
+**Parameters**:
+- `imagePath` — Path to image file
+- `prompt` — What to analyze or describe
+
+**Example**:
+```
+analyze_image(imagePath="/path/to/screenshot.png", prompt="Describe what is shown in this diagram")
+```
+
 ## Skills by Domain
 
 ### Content Engine 🛠️
@@ -176,6 +188,8 @@ Your available tools:
 - gmail_send: send email
 - telegram_send: send Telegram messages
 - spawn_subagent: delegate to sub-agent
+- transcribe_audio: transcribe audio files to text
+- analyze_image: analyze images using vision models
 
 Rules:
 - Use bash_exec freely for local tasks
@@ -197,4 +211,4 @@ When you ask me to create something, I typically:
 
 ---
 
-*Last updated: 2025-02-28*
+*Last updated: 2026-02-28 (rev 4)*
